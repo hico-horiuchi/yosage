@@ -1,4 +1,4 @@
-## yosage v0.1.0
+## yosage v0.2.0
 
 ![eupho.gif](https://raw.githubusercontent.com/hico-horiuchi/yosage/master/eupho.gif)
 
