@@ -2,41 +2,34 @@ package yosage
 
 import (
 	"fmt"
-
-	"github.com/gographics/imagick/imagick"
+	"image"
+	"image/draw"
+	"image/gif"
 )
 
-func composite(input, lgtm *imagick.MagickWand) (*imagick.MagickWand, error) {
-	output := imagick.NewMagickWand()
+func composite(input *gif.GIF, lgtm image.Image) (*gif.GIF, error) {
+	output := gif.GIF{
+		Delay:     input.Delay,
+		LoopCount: input.LoopCount,
+		Disposal:  input.Disposal,
+		Config: image.Config{
+			Width:  input.Config.Width,
+			Height: input.Config.Height,
+		},
+	}
 
-	x := int(input.GetImageWidth()/2 - lgtm.GetImageWidth()/2)
-	y := int(input.GetImageHeight()/2 - lgtm.GetImageHeight()/2)
+	x := input.Config.Width/2 - lgtm.Bounds().Dx()/2
+	y := input.Config.Height/2 - lgtm.Bounds().Dy()/2
 
 	fmt.Print("compositting frame...")
 
-	for i := 0; i < int(input.GetNumberImages()); i++ {
+	for i, frame := range input.Image {
 		fmt.Printf("%d ", i+1)
 
-		input.SetIteratorIndex(i)
-		frame := input.GetImage()
-
-		if err := frame.CompositeImage(lgtm, imagick.COMPOSITE_OP_OVER, x, y); err != nil {
-			frame.Destroy()
-			fmt.Println()
-			return output, err
-		}
-
-		if err := output.AddImage(frame); err != nil {
-			frame.Destroy()
-			fmt.Println()
-			return output, err
-		}
-
-		frame.Destroy()
+		draw.Draw(frame, frame.Bounds(), lgtm, image.Point{-x, -y}, draw.Over)
+		output.Image = append(output.Image, frame)
 	}
 
 	fmt.Println("done")
-	input.ResetIterator()
-
-	return output, nil
+	return &output, nil
 }

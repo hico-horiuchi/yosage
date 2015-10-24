@@ -2,15 +2,26 @@ package yosage
 
 import (
 	"fmt"
-
-	"github.com/gographics/imagick/imagick"
+	"image/gif"
+	"os"
 )
 
-func write(outputPath string, output *imagick.MagickWand) error {
+func write(outputPath string, output *gif.GIF) error {
 	fmt.Print("writing...")
 
-	if err := output.WriteImages(outputPath, true); err != nil {
+	if err := checkGIF(outputPath); err != nil {
 		fmt.Println()
+		return err
+	}
+
+	outputFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer outputFile.Close()
+
+	err = gif.EncodeAll(outputFile, output)
+	if err != nil {
 		return err
 	}
 

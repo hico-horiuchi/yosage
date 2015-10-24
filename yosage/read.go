@@ -1,53 +1,71 @@
 package yosage
 
 import (
-	"errors"
+	"bytes"
 	"fmt"
-
-	"github.com/gographics/imagick/imagick"
+	"image"
+	"image/gif"
+	"image/png"
+	"io"
+	"os"
 )
 
-func readInput(inputPath string) (*imagick.MagickWand, error) {
+func readInput(inputPath string) (*gif.GIF, error) {
 	fmt.Print("reading input gif...")
 
-	input := imagick.NewMagickWand()
-
-	if err := input.ReadImage(inputPath); err != nil {
+	if err := checkGIF(inputPath); err != nil {
 		fmt.Println()
-		return input, err
+		return nil, err
+	}
+
+	inputFile, err := os.Open(inputPath)
+	if err != nil {
+		fmt.Println()
+		return nil, err
+	}
+	defer inputFile.Close()
+
+	input, err := gif.DecodeAll(inputFile)
+	if err != nil {
+		fmt.Println()
+		return nil, err
 	}
 
 	fmt.Println("done")
-
-	if input.GetImageFormat() != "GIF" {
-		return input, errors.New("yosage: input is not gif")
-	}
-
 	return input, nil
 }
 
 var LGTM interface{}
 
-func readLGTM() (*imagick.MagickWand, error) {
+func readLGTM() (image.Image, error) {
+	var lgtmFile io.Reader
 	fmt.Print("reading LGTM png...")
-
-	var err error
-	lgtm := imagick.NewMagickWand()
 
 	switch LGTM.(type) {
 	case string:
-		err = lgtm.ReadImage(LGTM.(string))
-		fmt.Println("done")
+		lgtmPath := LGTM.(string)
+
+		if err := checkPNG(lgtmPath); err != nil {
+			fmt.Println()
+			return nil, err
+		}
+
+		lgtmFile, err := os.Open(lgtmPath)
+		if err != nil {
+			fmt.Println()
+			return nil, err
+		}
+		defer lgtmFile.Close()
 	case []byte:
-		err = lgtm.ReadImageBlob(LGTM.([]byte))
-		fmt.Println("done")
+		lgtmFile = bytes.NewReader(LGTM.([]byte))
 	}
 
+	lgtm, err := png.Decode(lgtmFile)
 	if err != nil {
-		return lgtm, err
-	} else if lgtm.GetImageFormat() != "PNG" {
-		return lgtm, errors.New("yosage: LGTM is not png")
+		fmt.Println()
+		return nil, err
 	}
 
+	fmt.Println("done")
 	return lgtm, nil
 }

@@ -1,4 +1,3 @@
-gom 'github.com/gographics/imagick/imagick'
 gom 'github.com/spf13/cobra'
 gom 'github.com/tcnksm/go-latest'
 

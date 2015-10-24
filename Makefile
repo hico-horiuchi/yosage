@@ -19,6 +19,8 @@ build: fmt bindata
 
 release: fmt
 	GOOS=linux GOARCH=amd64 gom build $(GO_BUILDOPT) -o bin/yosage$(VERSION).linux-amd64 *.go
+	GOOS=darwin GOARCH=amd64 gom build $(GO_BUILDOPT) -o bin/yosage$(VERSION).darwin-amd64 *.go
+	GOOS=windows GOARCH=amd64 gom build $(GO_BUILDOPT) -o bin/yosage$(VERSION).windows-amd64 *.go
 
 clean:
 	rm -f bin/yosage*
