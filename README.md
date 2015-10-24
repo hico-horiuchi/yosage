@@ -3,7 +3,7 @@
 ![eupho.gif](https://raw.githubusercontent.com/hico-horiuchi/yosage/master/eupho.gif)
 
 `yosage` (良さげ) is LGTM gif generator by Golang.  
-This is stand-alone (not require ImageMagick, include [lgtm.png](https://github.com/hico-horiuchi/yosage/blob/master/lgtm.png)) impremented with [gographics/imagick](https://github.com/gographics/imagick).  
+This is stand-alone (not require ImageMagick, include [lgtm.png](https://github.com/hico-horiuchi/yosage/blob/master/lgtm.png)).  
 I get ideas from [8398a7/lgtm_creater](https://github.com/8398a7/lgtm_creater) and [syohex/speedline](https://github.com/syohex/speedline).
 
 #### Requirements
