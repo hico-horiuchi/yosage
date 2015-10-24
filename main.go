@@ -3,6 +3,9 @@ package main
 import (
 
 	// "github.com/gographics/imagick/imagick"
+
+	"fmt"
+
 	"github.com/hico-horiuchi/yosage/yosage"
 	"github.com/spf13/cobra"
 )
@@ -25,7 +28,8 @@ func main() {
 			var err error
 
 			if version {
-				yosage.Version(VERSION)
+				fmt.Print(yosage.Version(VERSION))
+				return
 			}
 
 			if lgtm == "" {

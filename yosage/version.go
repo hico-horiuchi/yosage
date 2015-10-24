@@ -2,7 +2,6 @@ package yosage
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	latest "github.com/tcnksm/go-latest"
@@ -28,7 +27,7 @@ func verCheck(version string) <-chan *latest.CheckResponse {
 	return verCheckCh
 }
 
-func Version(version string) {
+func Version(version string) string {
 	bytes := []byte(fmt.Sprintf("yosage version %s\n", version))
 	verCheckCh := verCheck(version)
 
@@ -38,10 +37,9 @@ func Version(version string) {
 			if res != nil && res.Outdated {
 				bytes = append(bytes, fmt.Sprintf("Latest version of yosage is %s, please update it\n", res.Current)...)
 			}
+			return string(bytes)
 		case <-time.After(TIMEOUT_SEC * time.Second):
+			return string(bytes)
 		}
 	}
-
-	fmt.Print(bytes)
-	os.Exit(0)
 }
