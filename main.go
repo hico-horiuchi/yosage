@@ -39,7 +39,7 @@ func main() {
 				yosage.LGTM = lgtm
 			}
 
-			err = yosage.Generate(input, output)
+			err = yosage.GenerateFromPath(input, output)
 			yosage.CheckError(err)
 		},
 	}
