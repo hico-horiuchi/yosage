@@ -1,4 +1,4 @@
-VERSION     := 0.2.1
+VERSION     := 0.2.2
 GO_BUILDOPT := -ldflags '-s -w -X main.VERSION=$(VERSION)'
 
 gom:
